@@ -5,10 +5,16 @@ import pygame as pg
 import pygame.image
 import cv2
 
+def listToString(l):
+    out=""
+    for e in l:
+        out+=str(e)+" "
+    return out
+
 pg.init()
 
 #MODEL
-detection = Detection('best.pt')
+detection = Detection('best_model.pt')
 
 #WIDGETS
 screen = pg.display.set_mode((1000,800))
@@ -38,14 +44,17 @@ while loop:
                 calcul = detection.predict(frame)
                 result = detection.resolve(calcul)
                 print(calcul, "=", result)
-            '''
+
+                text = font.render(listToString(calcul) + " = " + str(result), True, (0, 0, 0))
+                textRect = text.get_rect()
+                textRect.center = (w // 2, 30)
+
             if event.key == pg.K_a:
-                pg.image.save(canvas, "img/mixte/mxt_" + str(i) +".png")
+                pg.image.save(canvas, "img/op/op_" + str(i) +".png")
                 canvas.fill((0,0,0))
                 i+=1
-            '''
 
-
+    screen.fill((153,255,255))
     screen.blit(canvas, [canva_x,canva_y] )
     screen.blit(text, textRect)
 

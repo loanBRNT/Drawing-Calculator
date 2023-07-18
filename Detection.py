@@ -6,8 +6,8 @@ import json
 class Detection:
 
     model = None
-    digit = ["0","1","2","3","4","5","6","7","8","9"]
-    operation = ["+","-","/","*"]
+    val = {"zero":"0","un":"1","deux":"2","trois":"3","quatre":"4","cinq":"5","six":"6","sept":"7","huit":"8",
+             "neuf":"9","add":"+","sous":"-","div":"/","mult":"*"}
 
     def __init__(self, model_path):
         self.model = self.load_model(model_path)
@@ -27,7 +27,7 @@ class Detection:
         return labels, cord
 
     def class_to_label(self, x):
-        return self.classes[int(x)]
+        return self.val[self.classes[int(x)]]
 
     def plot_boxes(self, results, frame):
         labels, cord = results
@@ -47,6 +47,10 @@ class Detection:
         frame = cv2.resize(frame, (640, 640))
 
         results = self.score_frame(frame)
+        frame = self.plot_boxes(results, frame)
+
+        print(results)
+        cv2.imwrite("img_dessine.png",frame)
 
         out = []
         temp = []
